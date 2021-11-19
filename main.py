@@ -24,8 +24,12 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
         self.replace("html.html", "htmltmp.html", "htmlcode", parse)       
         self.loadPage()
         self.anslist = []
-       
+        self._checker = checker(data_source=self)
+
+
+
         self.next_qst_btn.clicked.connect(self.get_answer)
+        self.next_qst_btn.clicked.connect(self._checker.check)
     
         
         
@@ -56,32 +60,38 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
        
         with open('htmltmp.html', 'r', encoding="utf-8") as f:
             html = f.read()
-            self.webEngineView.setHtml(html)
-
+            self.webEngineView.setHtml(html)   
     
-    def get_answer(self):
-        
+    def get_answer(self):        
         got_answ = self.answeredit.text()     
         self.anslist.append(got_answ)
-        print(self.anslist)
+        #print(self.anslist)
         return self.anslist
 
 
-class checker(testApp):
-    def __init__(self):
-        super(checker, self).__init__()
-        self.vern_answer = 3
-        self.got_answ = self.anslist[-1]
+class checker():
+    #def __init__(self):
+        #super(checker, self).__init__()
+        #self.vern_answer = 3
+        #self.got_answ = self.anslist[-1]
+    def __init__(self, data_source = None):
+        self._data_source = data_source  
+        self.got_answlist = self._data_source.anslist        
+        self.vern_answer = "3"
         
-    def _check(self):
+    def check(self):
+        self.got_answ = self.got_answlist[-1]
+        
+        if self.got_answ == []:
+            pass        
+        
         if self.got_answ == self.vern_answer:
             print("ok")
         else:
             print("no")
+        #print(self.got_answ)
+        #print(self.got_answlist)
 
-    @property
-    def checker_check(self):
-        return self._check
 
 
 if __name__ == "__main__":
