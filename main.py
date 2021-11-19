@@ -25,22 +25,9 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
         self.loadPage()
         self.anslist = []
         self._checker = checker(data_source=self)
-
-
-
         self.next_qst_btn.clicked.connect(self.get_answer)
         self.next_qst_btn.clicked.connect(self._checker.check)
     
-        
-        
-        #if (self.get_answer()) == "1":
-            #print("Ok")
-        
-    
-        
-        
-     
-
     def replace(self, filein, fileout, pattern, subst):
         # Read contents from file as a single string
         file_handle = open(filein, 'r', encoding="utf-8")
@@ -91,7 +78,6 @@ class checker():
             print("no")
         #print(self.got_answ)
         #print(self.got_answlist)
-
 
 
 if __name__ == "__main__":
