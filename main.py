@@ -56,6 +56,10 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
         return self.anslist
 
 
+
+    #def builder_f(self):
+
+
 class checker():
     #def __init__(self):
         #super(checker, self).__init__()

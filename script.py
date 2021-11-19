@@ -8,13 +8,13 @@ url = input()
 
 spis = Parser1(url)
 #list1 = spis.hrefs
-
+print(spis.hrefs)
 for el in spis.hrefs:
     
     parse = Parser1(el)
     
-    s = parse.answer.replace("Ответ: " , "")
-    print(parse.text_with_html,s, ":" , parse.problem_id)
+    #s = parse.answer.replace("Ответ: " , "")
+    #print(parse.text_with_html,s, ":" , parse.problem_id)
 
 
 

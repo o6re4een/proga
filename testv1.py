@@ -11,8 +11,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
-
-
 class Ui_Test1(object):
     def setupUi(self, Test1):
         Test1.setObjectName("Test1")
@@ -25,27 +23,32 @@ class Ui_Test1(object):
         self.quest1.setObjectName("quest1")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.quest1)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-
         
-
+        
+        
         self.webEngineView = QWebEngineView(self.quest1)
         self.webEngineView.setObjectName("webEngineView")
         self.verticalLayout_2.addWidget(self.webEngineView)
         self.answeredit = QtWidgets.QLineEdit(self.quest1)
         self.answeredit.setObjectName("answeredit")
         self.verticalLayout_2.addWidget(self.answeredit)
+        self.testwidget.addWidget(self.quest1)
+        self.verticalLayout.addWidget(self.testwidget)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setSizeConstraint(QtWidgets.QLayout.SetMaximumSize)
         self.horizontalLayout_2.setContentsMargins(10, 0, -1, 0)
         self.horizontalLayout_2.setSpacing(12)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.finish_btn = QtWidgets.QPushButton(Test1)
+        self.finish_btn.setObjectName("finish_btn")
+        self.horizontalLayout_2.addWidget(self.finish_btn)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
-        self.prev_qst_btn = QtWidgets.QPushButton(self.quest1)
+        self.prev_qst_btn = QtWidgets.QPushButton(Test1)
         self.prev_qst_btn.setMaximumSize(QtCore.QSize(130, 16777215))
         self.prev_qst_btn.setObjectName("prev_qst_btn")
         self.horizontalLayout_2.addWidget(self.prev_qst_btn)
-        self.next_qst_btn = QtWidgets.QPushButton(self.quest1)
+        self.next_qst_btn = QtWidgets.QPushButton(Test1)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -57,9 +60,7 @@ class Ui_Test1(object):
         self.next_qst_btn.setIconSize(QtCore.QSize(16, 5))
         self.next_qst_btn.setObjectName("next_qst_btn")
         self.horizontalLayout_2.addWidget(self.next_qst_btn)
-        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
-        self.testwidget.addWidget(self.quest1)
-        self.verticalLayout.addWidget(self.testwidget)
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
 
         self.retranslateUi(Test1)
         self.testwidget.setCurrentIndex(0)
@@ -69,16 +70,6 @@ class Ui_Test1(object):
         _translate = QtCore.QCoreApplication.translate
         Test1.setWindowTitle(_translate("Test1", "Dialog"))
         
+        self.finish_btn.setText(_translate("Test1", "Завершить"))
         self.prev_qst_btn.setText(_translate("Test1", "Предыдущий вопрс"))
         self.next_qst_btn.setText(_translate("Test1", "Следующий вопрос"))
-
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    Test1 = QtWidgets.QWidget()
-    ui = Ui_Test1()
-    ui.setupUi(Test1)
-    Test1.show()
-    sys.exit(app.exec_())
