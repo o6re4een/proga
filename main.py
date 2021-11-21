@@ -1,6 +1,4 @@
-
 import sys
-from typing import get_args
 
 from PyQt5.QtWebEngineWidgets import QWebEnginePage, QWebEngineView
 from PyQt5 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets
@@ -18,15 +16,46 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
     def __init__(self):
         super(testApp, self).__init__()
         self.setupUi(self)
-        parse = Parser1("https://math-ege.sdamgia.ru/test?id=41961331&nt=True&pub=False")        
-        parse = parse.text_with_html        
-        parse = str(parse)
-        self.replace("html.html", "htmltmp.html", "htmlcode", parse)       
+
+
+        self.parse = Parser1("https://math-ege.sdamgia.ru/test?id=41961331&nt=True&pub=False")        
+        self.parse = self.parse.text_with_html        
+        self.parse = str(self.parse)
+        self.replace("html.html", "htmltmp.html", "htmlcode", self.parse)       
         self.loadPage()
         self.anslist = []
+        
+   
+    
+    
+    
+        
         self._checker = checker(data_source=self)
         self.next_qst_btn.clicked.connect(self.get_answer)
         self.next_qst_btn.clicked.connect(self._checker.check)
+    
+    
+
+    def loadPage(self):
+        
+        with open('htmltmp.html', 'r', encoding="utf-8") as f:
+            html = f.read()
+            
+            self.webEngineView.setHtml(html)
+            
+
+    
+    def get_answer(self):        
+        got_answ = self.answeredit.text()     
+        self.anslist.append(got_answ)
+        #print(self.anslist)
+        return self.anslist
+
+
+    
+    
+    
+    
     
     def replace(self, filein, fileout, pattern, subst):
         # Read contents from file as a single string
@@ -43,28 +72,46 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
         file_handle.write(file_string)
         file_handle.close()
 
-    def loadPage(self):
-       
-        with open('htmltmp.html', 'r', encoding="utf-8") as f:
-            html = f.read()
-            self.webEngineView.setHtml(html)   
+
+
+
+
+
+class TestNode():
+    def __init__(self, id, text, key):  
+        self._id = id
+        self._text = text
+        self._key = key
+
+    @property
+    def get_answ_id(self):
+        return self._id
+
+
+    @property
+    def get_answ_text(self):
+        return self._text
+
+
+    @property
+    def get_answ_key(self):
+        return self._key
+
+
+
+        
+
+
     
-    def get_answer(self):        
-        got_answ = self.answeredit.text()     
-        self.anslist.append(got_answ)
-        #print(self.anslist)
-        return self.anslist
+        
+       
 
 
 
-    #def builder_f(self):
 
 
 class checker():
-    #def __init__(self):
-        #super(checker, self).__init__()
-        #self.vern_answer = 3
-        #self.got_answ = self.anslist[-1]
+    
     def __init__(self, data_source = None):
         self._data_source = data_source  
         self.got_answlist = self._data_source.anslist        
@@ -80,8 +127,6 @@ class checker():
             print("ok")
         else:
             print("no")
-        #print(self.got_answ)
-        #print(self.got_answlist)
 
 
 if __name__ == "__main__":
@@ -89,4 +134,5 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     Test1 = testApp()
     Test1.show()
+    
     sys.exit(app.exec_())
