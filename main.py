@@ -1,13 +1,12 @@
 
 import sys
-from typing import get_args
+
 import sqlite3 
 from PyQt5.QtWebEngineWidgets import QWebEnginePage, QWebEngineView
 from PyQt5 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt5.QtGui import QPixmap, QImage
 import requests
-from requests.api import get
 from testv1 import Ui_Test1 
 from myparser import Parser1
 import re
@@ -20,6 +19,7 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
         self.setupUi(self)
         self._counter = 0
         self.nodetaker()
+        self.webEngineView.setHtml(self.nodemassive[self._counter].get_text)
         self.anslist = []
         self._checker = checker(data_source=self)
         self.next_qst_btn.clicked.connect(self.get_answer)
@@ -43,25 +43,29 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
         
 
 
-    def page_swither_forward(self):   
-        self._tmp_node = self.nodemassive[self._counter]
-        self._text = self._tmp_node.get_text
+    def page_swither_forward(self):  
+        self._counter = self._counter + 1 
+       
+        self._text = self.nodemassive[self._counter].get_text
         
         self.replace("html.html", "htmltmp.html", "htmlcode", self._text)
-
-        self.loadPage()
+        self.loadPage()   
+        
         print(self._counter)
-        self._counter = self._counter + 1
-
         return self._counter
+        
     def page_swither_backward(self):
-        self._tmp_node = self.nodemassive[self._counter]
-        self._text = self._tmp_node.get_text
-        self._counter = self._counter - 1
+        if self._counter > 0:
+            self._counter = self._counter - 1
+        self._text = self.nodemassive[self._counter].get_text
+       
+        
         self.replace("html.html", "htmltmp.html", "htmlcode", self._text)
         self.loadPage()
         print(self._counter)
         return self._counter
+       
+        
         
         
         
