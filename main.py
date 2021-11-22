@@ -22,11 +22,10 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
         self.webEngineView.setHtml(self.nodemassive[self._counter].get_text)
         self.anslist = []
         self._checker = checker(data_source=self)
-        self.next_qst_btn.clicked.connect(self.get_answer)
-        self.next_qst_btn.clicked.connect(self._checker.check)
-        self.next_qst_btn.clicked.connect(self.page_swither_forward)
-        self.prev_qst_btn.clicked.connect(self.page_swither_backward)
-        
+        #self.next_qst_btn.clicked.connect(self.get_answer)
+        #self.next_qst_btn.clicked.connect(self._checker.check)
+        self.next_qst_btn.clicked.connect(self.page_swith_forward)
+        self.prev_qst_btn.clicked.connect(self.page_swith_backward)
 
         
         
@@ -36,32 +35,87 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
             self.nodemassive.append(node)
         return self.nodemassive
 
-           
+
+
+    
+    def get_answer(self):
+        
+      
+        
+
+
+        self.got_answ = self.answeredit.text()
+
+
+        if self.got_answ != "":
+            self.answeredit.clear()
+            try:
+                self.answeredit.setText(self.anslist[self._counter])
+                #self.anslist[self._counter] = self.got_answ
+                
+                print("t1")
+            except:
+                if self.got_answ != "": 
+                     
+                    
+                    if not self.got_answ in self.anslist:
+                        self.anslist.append(self.got_answ)
+                    print("ap")
+                else:
+                    self.answeredit.setText(self.anslist[self._counter])
+                    print("ex")
+        elif self.got_answ == "":
+            self.answeredit.setText(self.anslist[self._counter])
+            print("lastexp")
+
+
+    
+        return self.anslist
+        
+
+
+   
+   
+   
+   
+    def page_swith_forward(self):
+        self._counter = self._counter + 1
+        self.get_answer()   
+
          
-       
-        
-        
-
-
-    def page_swither_forward(self):  
-        self._counter = self._counter + 1 
-       
-        self._text = self.nodemassive[self._counter].get_text
-        
+                    
+                
+        self._text = self.nodemassive[self._counter].get_text   
         self.replace("html.html", "htmltmp.html", "htmlcode", self._text)
+        #self.answeredit.clear()
         self.loadPage()   
         
+        
         print(self._counter)
+        print(self.anslist)
+        
         return self._counter
         
-    def page_swither_backward(self):
+    def page_swith_backward(self):  
+        
+          
+         
         if self._counter > 0:
             self._counter = self._counter - 1
-        self._text = self.nodemassive[self._counter].get_text
-       
         
+        self.get_answer()
+        
+        self._text = self.nodemassive[self._counter].get_text    
         self.replace("html.html", "htmltmp.html", "htmlcode", self._text)
+        
         self.loadPage()
+
+        
+        
+        print(self.anslist)
+       
+
+
         print(self._counter)
         return self._counter
        
@@ -98,12 +152,7 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
             html = f.read()
             self.webEngineView.setHtml(html)
     
-    def get_answer(self):
-        
-        got_answ = self.answeredit.text()     
-        self.anslist.append(got_answ)
-        print(self.anslist)
-        return self.anslist
+    
 
 
 
