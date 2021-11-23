@@ -6,6 +6,7 @@ from PyQt5.QtWebEngineWidgets import QWebEnginePage, QWebEngineView
 from PyQt5 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt5.QtGui import QPixmap, QImage
+from PyQt5.sip import enableautoconversion
 import requests
 from testv1 import Ui_Test1 
 from myparser import Parser1
@@ -21,114 +22,74 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
         self.nodetaker()
         self.webEngineView.setHtml(self.nodemassive[self._counter].get_text)
         self.anslist = []
-        self._checker = checker(data_source=self)
+        self.clear_list()
+     
+        #self._checker = checker(data_source=self)
+        
         #self.next_qst_btn.clicked.connect(self.get_answer)
         #self.next_qst_btn.clicked.connect(self._checker.check)
         self.next_qst_btn.clicked.connect(self.page_swith_forward)
         self.prev_qst_btn.clicked.connect(self.page_swith_backward)
+        self.answeredit.editingFinished.connect(self.saver)
 
-        
+
+    def saver(self):
+        self._gotten_answ = self.answeredit.text()
+        self.anslist[self._counter] = self._gotten_answ
+        return self.anslist
+
+
+
+    def clear_list(self):
+         for i in range(0, 91):
+             self.anslist.append("")
+         return self.anslist
         
     def nodetaker(self): 
         self.nodemassive = []
-        for node in db_con("pars.db", "quest").select(10):
+        for node in db_con("pars.db", "quest").select(90):
             self.nodemassive.append(node)
         return self.nodemassive
 
 
 
     
-    def get_answer(self):
+    def fill_str(self):
+        self.answeredit.clear()
+        self.answeredit.setText(self.anslist[self._counter])
         
-      
-        
-
-
-        self.got_answ = self.answeredit.text()
-
-
-        if self.got_answ != "":
-            self.answeredit.clear()
-            try:
-                self.answeredit.setText(self.anslist[self._counter])
-                #self.anslist[self._counter] = self.got_answ
-                
-                print("t1")
-            except:
-                if self.got_answ != "": 
-                     
-                    
-                    if not self.got_answ in self.anslist:
-                        self.anslist.append(self.got_answ)
-                    print("ap")
-                else:
-                    self.answeredit.setText(self.anslist[self._counter])
-                    print("ex")
-        elif self.got_answ == "":
-            self.answeredit.setText(self.anslist[self._counter])
-            print("lastexp")
-
-
-    
-        return self.anslist
-        
-
-
-   
-   
-   
-   
-    def page_swith_forward(self):
+    def page_swith_forward(self): 
         self._counter = self._counter + 1
-        self.get_answer()   
-
+        
+        self.fill_str()
          
-                    
-                
         self._text = self.nodemassive[self._counter].get_text   
         self.replace("html.html", "htmltmp.html", "htmlcode", self._text)
         #self.answeredit.clear()
         self.loadPage()   
-        
-        
+          
         print(self._counter)
         print(self.anslist)
         
         return self._counter
         
     def page_swith_backward(self):  
-        
-          
-         
         if self._counter > 0:
             self._counter = self._counter - 1
         
-        self.get_answer()
+        self.fill_str()
         
         self._text = self.nodemassive[self._counter].get_text    
         self.replace("html.html", "htmltmp.html", "htmlcode", self._text)
         
         self.loadPage()
-
-        
-        
-        print(self.anslist)
-       
-
-
+ 
         print(self._counter)
+        print(self.anslist)
+
         return self._counter
        
         
-        
-        
-        
-        
-        
-
-        
-
-
 
 
     def replace(self, filein, fileout, pattern, subst):
