@@ -23,16 +23,34 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
         self.webEngineView.setHtml(self.nodemassive[self._counter].get_text)
         self.anslist = []
         self.clear_list()
-     
-        #self._checker = checker(data_source=self)
+        self.get_keylist()
         
+        print(self.keylist)
         #self.next_qst_btn.clicked.connect(self.get_answer)
         #self.next_qst_btn.clicked.connect(self._checker.check)
         self.next_qst_btn.clicked.connect(self.page_swith_forward)
         self.prev_qst_btn.clicked.connect(self.page_swith_backward)
         self.answeredit.editingFinished.connect(self.saver)
+        
+        
+        
+        
+        #
+        self._checker = checker(self.anslist, self.keylist)
+        self.finish_btn.clicked.connect(self._checker.check)
+        self.finish_btn.clicked.connect(self.close_win)
+        
+    
+    def close_win(self):
+        self.close()
 
 
+    def get_keylist(self):
+        self.keylist= []
+        for k in range(len(self.nodemassive)):
+            self.keylist.append(self.nodemassive[k].get_asnwer)
+        return self.keylist
+    
     def saver(self):
         self._gotten_answ = self.answeredit.text()
         self.anslist[self._counter] = self._gotten_answ
@@ -47,7 +65,7 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
         
     def nodetaker(self): 
         self.nodemassive = []
-        for node in db_con("pars.db", "quest").select(90):
+        for node in db_con("pars.db", "quest").select(92):
             self.nodemassive.append(node)
         return self.nodemassive
 
@@ -168,23 +186,19 @@ class checker():
         #super(checker, self).__init__()
         #self.vern_answer = 3
         #self.got_answ = self.anslist[-1]
-    def __init__(self, data_source = None):
-        self._data_source = data_source  
-        self.got_answlist = self._data_source.anslist        
-        self.vern_answer = "3"
+    def __init__(self,anslist, keylist): 
+        self._answlist = anslist       
+        self._keylist = keylist
+        self._score = 0
         
     def check(self):
-        self.got_answ = self.got_answlist[-1]
-        
-        if self.got_answ == []:
-            pass        
-        
-        if self.got_answ == self.vern_answer:
-            print("ok")
-        else:
-            print("no")
-   
-
+        for _i in range(len(self._answlist)):
+            if self._answlist[_i] == self._keylist[_i]:
+                self._score +=1
+            else:
+                self._score += 0
+        print(self._score)
+        return self._score
 
 if __name__ == "__main__":
 
