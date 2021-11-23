@@ -5,14 +5,13 @@ import sqlite3
 from PyQt5.QtWebEngineWidgets import QWebEnginePage, QWebEngineView
 from PyQt5 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
-from PyQt5.QtGui import QPixmap, QImage
+from PyQt5.QtGui import QBrush, QColor
 from PyQt5.sip import enableautoconversion
 import requests
 from testv1 import Ui_Test1 
-from myparser import Parser1
+#from myparser import Parser1
 import re
-
-
+from finish_screen import Ui_finish_screen
 
 class testApp(QtWidgets.QWidget, Ui_Test1):
     def __init__(self):
@@ -37,13 +36,21 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
         
         #
         self._checker = checker(self.anslist, self.keylist)
+        
         self.finish_btn.clicked.connect(self._checker.check)
-        self.finish_btn.clicked.connect(self.close_win)
+        
+        self.finish_btn.clicked.connect(self.open_finish)
         
     
+    
+    def open_finish(self):
+        self.dialog = finish_app(self.anslist, self.keylist, self._checker._score)
+        self.dialog.show()
+        
+   
     def close_win(self):
         self.close()
-
+        
 
     def get_keylist(self):
         self.keylist= []
@@ -136,6 +143,29 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
 
 
 
+class finish_app(QtWidgets.QWidget, Ui_finish_screen):
+    def __init__(self, anlist, keys_list, score):
+        super(finish_app, self).__init__()
+        self.setupUi(self)
+        self._score = score
+        self._score = str(self._score)
+        self._answlist = anlist
+        self._keys = keys_list  
+        self.tableWidget.setColumnCount(len(self._keys))
+        self.label.setText("Всего правильных ответов:" + self._score)
+        self.build_table()
+    
+    def build_table(self):
+        
+        
+        for _x in range(0, len(self._keys)-1): 
+            self.tableWidget.setItem(0, _x , QtWidgets.QTableWidgetItem(self._answlist[_x]))
+            # if self._answlist[_x] == self._keys[_x]:
+            #     item = self.tableWidget.QTableWidgetItem()
+            #     self.tableWidget.QTableWidgetItem.setForeground(QBrush(QColor(0, 255, 0)))
+            # else:
+            #    self.tableWidget.QTableWidgetItem.setForeground(QBrush(QColor(0, 255, 0)))
+            self.tableWidget.setItem(1, _x , QtWidgets.QTableWidgetItem(self._keys[_x]))
 
 
 
