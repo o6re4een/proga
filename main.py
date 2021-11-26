@@ -1,18 +1,17 @@
 
 import sys
-
 import sqlite3 
+import re
+#
 from PyQt5.QtWebEngineWidgets import QWebEnginePage, QWebEngineView
 from PyQt5 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt5.QtGui import QBrush, QColor
 from PyQt5.sip import enableautoconversion
-import requests
+#
 from testv1 import Ui_Test1 
-#from myparser import Parser1
-import re
 from finish_screen import Ui_finish_screen
-
+#
 class testApp(QtWidgets.QWidget, Ui_Test1):
     def __init__(self):
         super(testApp, self).__init__()   
@@ -23,7 +22,7 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
         self.anslist = []
         self.clear_list()
         self.get_keylist()
-        
+
         print(self.keylist)
         #self.next_qst_btn.clicked.connect(self.get_answer)
         #self.next_qst_btn.clicked.connect(self._checker.check)
@@ -42,6 +41,7 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
         self.finish_btn.clicked.connect(self.open_finish)
         
     
+
     
     def open_finish(self):
         self.dialog = finish_app(self.anslist, self.keylist, self._checker._score)
@@ -84,7 +84,9 @@ class testApp(QtWidgets.QWidget, Ui_Test1):
         self.answeredit.setText(self.anslist[self._counter])
         
     def page_swith_forward(self): 
-        self._counter = self._counter + 1
+        
+        if self._counter <90:
+            self._counter = self._counter + 1
         
         self.fill_str()
          
