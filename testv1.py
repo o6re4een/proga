@@ -24,8 +24,6 @@ class Ui_Test1(object):
         self.verticalLayout = QtWidgets.QVBoxLayout(self.quest)
         self.verticalLayout.setObjectName("verticalLayout")
         
-        
-        
         self.webEngineView = QWebEngineView(self.quest)
         self.webEngineView.setObjectName("webEngineView")
         self.verticalLayout.addWidget(self.webEngineView)

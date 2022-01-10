@@ -14,7 +14,7 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(817, 473)
+        MainWindow.resize(757, 502)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -74,13 +74,16 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addWidget(self.widget)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 817, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 757, 21))
         self.menubar.setObjectName("menubar")
         self.faq = QtWidgets.QMenu(self.menubar)
         self.faq.setObjectName("faq")
         self.testlist = QtWidgets.QMenu(self.menubar)
         self.testlist.setObjectName("testlist")
         MainWindow.setMenuBar(self.menubar)
+        self.statusBar = QtWidgets.QStatusBar(MainWindow)
+        self.statusBar.setObjectName("statusBar")
+        MainWindow.setStatusBar(self.statusBar)
         self.action_open = QtWidgets.QAction(MainWindow)
         self.action_open.setObjectName("action_open")
         self.open_dvig = QtWidgets.QAction(MainWindow)
@@ -149,9 +152,9 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        
+       
         self.finish_btn.setText(_translate("MainWindow", "Завершить"))
-        self.prev_qst_btn.setText(_translate("MainWindow", "Предыдущий вопрс"))
+        self.prev_qst_btn.setText(_translate("MainWindow", "Предыдущий вопрос"))
         self.next_qst_btn.setText(_translate("MainWindow", "Следующий вопрос"))
         self.faq.setTitle(_translate("MainWindow", "Справочные материалы"))
         self.testlist.setTitle(_translate("MainWindow", "Тесты"))
@@ -170,4 +173,3 @@ class Ui_MainWindow(object):
         self.test_procent.setText(_translate("MainWindow", "Задачи на проценты"))
         self.test_progres.setText(_translate("MainWindow", "Задачи на прогресии"))
         self.test_default.setText(_translate("MainWindow", "Все задачи"))
-

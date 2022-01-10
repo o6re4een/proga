@@ -2,14 +2,15 @@
 import sys
 import sqlite3 
 import re
-from typing import Text
+import os
+import subprocess 
 #
 from PyQt5.QtWebEngineWidgets import QWebEnginePage, QWebEngineView
 from PyQt5 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt5.QtGui import QBrush, QColor
 #
-from testv1 import Ui_Test1 
+
 from finish_screen import Ui_finish_screen
 from mainwindow import Ui_MainWindow
 #
@@ -19,7 +20,7 @@ class testApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self._counter = 0
         self.theme = None
-        self.nodetaker()      
+        self.take_all()      
         self.webEngineView.setHtml(self.nodemassive[self._counter].get_text)
         self.anslist = []
         self.clear_list()
@@ -30,7 +31,7 @@ class testApp(QtWidgets.QMainWindow, Ui_MainWindow):
         #self.next_qst_btn.clicked.connect(self._checker.check)
         self.next_qst_btn.clicked.connect(self.page_swith_forward)
         self.prev_qst_btn.clicked.connect(self.page_swith_backward)
-        self.answeredit.editingFinished.connect(self.saver)
+        self.answeredit.editingFinished.connect(self.save)
         
 
         #
@@ -48,36 +49,60 @@ class testApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.test_procent.triggered.connect(self.actionClick) 
         self.test_rabota.triggered.connect(self.actionClick) 
         self.test_progres.triggered.connect(self.actionClick) 
+        #
+        self.open_all_z.triggered.connect(self.action_open_teory) 
+        self.open_dvig.triggered.connect(self.action_open_teory) 
+        self.open_procent.triggered.connect(self.action_open_teory) 
+        self.open_dvig_okr.triggered.connect(self.action_open_teory) 
+        self.open_progres.triggered.connect(self.action_open_teory) 
+        self.open_rabota.triggered.connect(self.action_open_teory) 
+        self.open_smesi.triggered.connect(self.action_open_teory) 
+        
+        #  
+    def action_open_teory(self):
+        _action = self.sender() 
+        current_path = os.getcwd()
+        print(_action.text())
+        if _action.text() == "Задачи на движение":
+            os.startfile(current_path + "\Справка\Задачи на движение.docx")      
+        elif _action.text() == "Задачи на работу":
+            os.startfile(current_path + "\Справка\Задачи на работу.docx") 
+        elif _action.text() == "Задачи на движение по окружности":
+            os.startfile(current_path + "\Справка\Задачи на движение по окружности.docx") 
+        elif _action.text() == "Задачи на проценты" :
+            os.startfile(current_path + "\Справка\Задачи на проценты.docx") 
+        elif _action.text() == "Задачи на прогресии":
+            os.startfile(current_path + "\Справка\Задачи на прогрессии.docx") 
+        elif _action.text() == "Все задачи":
+            os.startfile(current_path + "\Справка\Все задачи.docx")
+        elif _action.text() == "Задачи на смеси и сплавы":
+            os.startfile(current_path + "\Справка\Задачи на сплавы.docx") 
 
-
-    
-    
-    
-    
-    
-    
 
     def actionClick(self):
         _action = self.sender()
-        
+        self.statusBar.showMessage('Вы поменяли тему! -->'+ "Текущая тема: "+ _action.text())
         #обработка клика 
         if _action.text() == "Задачи на движение":
             self.theme = "test_dvig"
-            
+            self.take_by_theme(self.theme)
         elif _action.text() == "Задачи на работу":
             self.theme = "test_rabota"
-        
+            self.take_by_theme(self.theme)
         elif _action.text() == "Задачи на движение по окружности":
             self.theme = "test_dvig_okr"
-        
-        elif _action.text() == "Задачи на проценты":
+            self.take_by_theme(self.theme)
+        elif _action.text() == "Задачи на проценты" or _action.text() == "Задачи на смеси и сплавы":
             self.theme = "test_smesi"  
-        
+            self.take_by_theme(self.theme)
         elif _action.text() == "Задачи на прогресии":
             self.theme = "test_progress"
+            self.take_by_theme(self.theme)
+        elif _action.text() == "Все задачи":
+            self.take_all()
         
-        self._counter = 0
-        self.tmp_node_taker(self.theme)
+        
+        self._counter = 0 
         self.webEngineView.setHtml(self.nodemassive[self._counter].get_text)
         self.answeredit.clear()
         self.clear_list()
@@ -101,7 +126,7 @@ class testApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.keylist.append(self.nodemassive[k].get_asnwer)
         return self.keylist
     
-    def saver(self):
+    def save(self):
         self._gotten_answ = self.answeredit.text()
         self.anslist[self._counter] = self._gotten_answ
         return self.anslist
@@ -114,7 +139,7 @@ class testApp(QtWidgets.QMainWindow, Ui_MainWindow):
              self.anslist.append("")
         return self.anslist
         
-    def nodetaker(self): 
+    def take_all(self): 
         self.nodemassive = []
         
         for node in db_con("pars.db", "quest", theme = None).select():
@@ -122,7 +147,7 @@ class testApp(QtWidgets.QMainWindow, Ui_MainWindow):
         return self.nodemassive
 
 
-    def tmp_node_taker(self, theme):
+    def take_by_theme(self, theme):
         self.nodemassive = []
         self.theme = theme    
         for node in db_con("pars.db", "quest", self.theme).select_by_theme():

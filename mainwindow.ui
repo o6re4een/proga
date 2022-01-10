@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>817</width>
-    <height>473</height>
+    <width>757</width>
+    <height>502</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -91,7 +91,7 @@
             </size>
            </property>
            <property name="text">
-            <string>Предыдущий вопрс</string>
+            <string>Предыдущий вопрос</string>
            </property>
           </widget>
          </item>
@@ -144,7 +144,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>817</width>
+     <width>757</width>
      <height>21</height>
     </rect>
    </property>
@@ -189,6 +189,7 @@
    <addaction name="faq"/>
    <addaction name="testlist"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="action_open">
    <property name="text">
     <string>Справочные материалы</string>
