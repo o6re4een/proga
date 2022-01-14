@@ -181,8 +181,6 @@
     <addaction name="separator"/>
     <addaction name="test_rabota"/>
     <addaction name="separator"/>
-    <addaction name="test_procent"/>
-    <addaction name="separator"/>
     <addaction name="test_progres"/>
     <addaction name="separator"/>
    </widget>
@@ -242,7 +240,7 @@
   </action>
   <action name="test_smesi_splavi">
    <property name="text">
-    <string>Задачи на смеси и сплавы</string>
+    <string>Задачи на проценты,смеси и сплавы</string>
    </property>
   </action>
   <action name="test_rabota">

@@ -3,8 +3,11 @@ import sys
 import sqlite3 
 import re
 import os
-import subprocess 
+import subprocess
+import PyQt5 
+
 #
+from PyQt5.Qt import Qt
 from PyQt5.QtWebEngineWidgets import QWebEnginePage, QWebEngineView
 from PyQt5 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
@@ -37,7 +40,7 @@ class testApp(QtWidgets.QMainWindow, Ui_MainWindow):
         #
         self._checker = checker(self.anslist, self.keylist)
         
-        self.finish_btn.clicked.connect(self._checker.check)
+        #self.finish_btn.clicked.connect(self._checker.check())
         
         self.finish_btn.clicked.connect(self.open_finish)
         
@@ -59,10 +62,23 @@ class testApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.open_smesi.triggered.connect(self.action_open_teory) 
         
         #  
+
+
+    
+    def keyPressEvent(self, event):
+        
+        if event.key() == Qt.Key_Left:
+            self.page_swith_backward()
+        elif event.key() == Qt.Key_Right  or event.key() == Qt.Key_Return:
+            self.page_swith_forward()
+        
+        
+
+
     def action_open_teory(self):
         _action = self.sender() 
         current_path = os.getcwd()
-        print(_action.text())
+        
         if _action.text() == "Задачи на движение":
             os.startfile(current_path + "\Справка\Задачи на движение.docx")      
         elif _action.text() == "Задачи на работу":
@@ -92,7 +108,7 @@ class testApp(QtWidgets.QMainWindow, Ui_MainWindow):
         elif _action.text() == "Задачи на движение по окружности":
             self.theme = "test_dvig_okr"
             self.take_by_theme(self.theme)
-        elif _action.text() == "Задачи на проценты" or _action.text() == "Задачи на смеси и сплавы":
+        elif _action.text() == "Задачи на проценты,смеси и сплавы":
             self.theme = "test_smesi"  
             self.take_by_theme(self.theme)
         elif _action.text() == "Задачи на прогресии":
@@ -167,6 +183,9 @@ class testApp(QtWidgets.QMainWindow, Ui_MainWindow):
         
         if self._counter <len(self.nodemassive)-1:
             self._counter = self._counter + 1
+            self.statusBar.showMessage("")
+        else:
+            self.statusBar.showMessage("Это последняя задача!")
         
         self.fill_str()
          
@@ -175,13 +194,14 @@ class testApp(QtWidgets.QMainWindow, Ui_MainWindow):
         #self.answeredit.clear()
         self.loadPage()   
           
-        print(self.anslist)
-        
         return self._counter
         
     def page_swith_backward(self):  
         if self._counter > 0:
             self._counter = self._counter - 1
+            self.statusBar.showMessage("")
+        else:
+            self.statusBar.showMessage("Это первая задача!")
         
         self.fill_str()
         
@@ -227,12 +247,23 @@ class finish_app(QtWidgets.QWidget, Ui_finish_screen):
     def __init__(self, anlist, keys_list, score):
         super(finish_app, self).__init__()
         self.setupUi(self)
-        self._score = score
+        self._score = score[0]
+        self._resh = score[1]
+        self.proc = 0
+        try:
+            self.proc= self._score/self._resh*100
+            self.proc = round(self.proc)
+        except:
+            pass
+        self.proc = str(self.proc)
         self._score = str(self._score)
         self._answlist = anlist
         self._keys = keys_list  
+        self._resh = str(score[1])
+
         self.tableWidget.setColumnCount(len(self._keys))
-        self.label.setText("Всего правильных ответов:" + self._score)
+        self.label.setText("Всего правильных ответов: " + self._score+"\n"+ "Всего заданий решено: " + self._resh + "\n" + "Процент успешно выполненных заданий: "+ self.proc + "%")
+
         self.build_table()
     
     def build_table(self):
@@ -240,11 +271,10 @@ class finish_app(QtWidgets.QWidget, Ui_finish_screen):
         
         for _x in range(0, len(self._keys)): 
             self.tableWidget.setItem(0, _x , QtWidgets.QTableWidgetItem(self._answlist[_x]))
-            # if self._answlist[_x] == self._keys[_x]:
-            #     item = self.tableWidget.QTableWidgetItem()
-            #     self.tableWidget.QTableWidgetItem.setForeground(QBrush(QColor(0, 255, 0)))
-            # else:
-            #    self.tableWidget.QTableWidgetItem.setForeground(QBrush(QColor(0, 255, 0)))
+            if self._answlist[_x] == self._keys[_x]:
+                self.tableWidget.item(0, _x).setForeground(QBrush(QColor(28, 201, 22)))
+            else:
+               self.tableWidget.item(0, _x).setForeground(QBrush(QColor(171, 39, 39)))
             self.tableWidget.setItem(1, _x , QtWidgets.QTableWidgetItem(self._keys[_x]))
 
 
@@ -315,12 +345,23 @@ class checker():
         self._score = 0
         
     def check(self):
+        self.resh=0
+        self._score = 0
         for _i in range(len(self._answlist)):
+            if not (self._answlist[_i] == "" or self._answlist[_i] == " "):
+            
+                self.resh+=1
             if self._answlist[_i] == self._keylist[_i]:
                 self._score +=1
             else:
+                
                 self._score += 0
-        return self._score
+        return self._score, self.resh
+    # def return_list_z(self, resh):
+    #     self.resh = 
+    #     return self.resh
+
+
 
 if __name__ == "__main__":
 

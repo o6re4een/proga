@@ -1,9 +1,7 @@
 from myparser import Parser1, link_taker
-import requests
-from bs4 import BeautifulSoup as BS
 import sqlite3
   
-url = "https://ege.sdamgia.ru/test?theme=89"
+url = "https://ege.sdamgia.ru/test?theme=88"
 
 spis = link_taker(url)
 #list1 = spis.hrefs
@@ -15,7 +13,7 @@ cur = con.cursor()
 
 quets_dict = {}
 
-theme = "test_progress"
+theme = "test_procent"
 
 def main():
     for el in spis.hrefs:
